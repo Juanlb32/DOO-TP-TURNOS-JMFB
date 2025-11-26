@@ -3,18 +3,15 @@ import os
 import datetime
 from cliente import Cliente
 from turno import Turno
-from gestor_turnos import GestorTurno
 
 class GestorCliente:
-
-    global agenda_clientes
     agenda_clientes = {}
 
     def __init__(self):
-        self.gestor_turno = GestorTurno()
+        pass
 
 
-    def agenda_clientes(self,ruta_archivo=None):
+    def cargar_agenda_clientes(self, ruta_archivo=None):
  
         
         if ruta_archivo is None:
@@ -33,7 +30,7 @@ class GestorCliente:
                         telefono=fila['telefono'],
                         email=fila['email']
                     )
-                    agenda_clientes[id_cliente] = cliente
+                    GestorCliente.agenda_clientes[id_cliente] = cliente
                     
         except FileNotFoundError:
             print(f"Error: El archivo {ruta_archivo} no fue encontrado.")
@@ -44,10 +41,10 @@ class GestorCliente:
 
 
 
-    def buscar_cliente(self,dni_cliente,opcion = None):
+    def buscar_cliente(self, dni_cliente, opcion=None):
 
-        if dni_cliente in agenda_clientes:
-            cliente = agenda_clientes[dni_cliente]
+        if dni_cliente in GestorCliente.agenda_clientes:
+            cliente = GestorCliente.agenda_clientes[dni_cliente]
             print(f"Cliente encontrado: {cliente}")
             if opcion == None:
                 while True:
@@ -61,7 +58,9 @@ class GestorCliente:
                     
                     if opcion == "1":
                         print("Asignando turno...")
-                        # Aquí se llamaría a la función para asignar turno
+                        from gestor_turnos import GestorTurno
+                        gestor_turno = GestorTurno()
+                        gestor_turno.listar_turnos_disponibles()
                         return cliente
                     elif opcion == "2":
                         cliente = self.modificar_cliente(dni_cliente)
@@ -104,24 +103,24 @@ class GestorCliente:
         except Exception as e:
             print(f"Error al guardar cliente en CSV: {e}")
         
-        self.agenda_clientes(ruta_archivo)
+        GestorCliente.agenda_clientes[dni] = nuevo_cliente
         print(f"Cliente registrado: {nuevo_cliente}")
         return nuevo_cliente
 
-    def modificar_cliente(self,dni_cliente):
+    def modificar_cliente(self, dni_cliente):
 
-            if dni_cliente in agenda_clientes:
-                del agenda_clientes[dni_cliente]
+            if dni_cliente in GestorCliente.agenda_clientes:
+                del GestorCliente.agenda_clientes[dni_cliente]
                 print(f"Cliente con DNI {dni_cliente} eliminado del diccionario.")
             else:
                 print(f"Cliente con DNI {dni_cliente} no encontrado en el diccionario.")
             
             return self.alta_cliente(dni_cliente)
 
-    def eliminar_cliente(self,dni_cliente):
+    def eliminar_cliente(self, dni_cliente):
 
-        if dni_cliente in agenda_clientes:
-            del agenda_clientes[dni_cliente]
+        if dni_cliente in GestorCliente.agenda_clientes:
+            del GestorCliente.agenda_clientes[dni_cliente]
             print(f"Cliente con DNI {dni_cliente} eliminado del diccionario.")
             
             # Eliminar del CSV

@@ -1,22 +1,21 @@
 from cliente import Cliente
-from turno import Turno 
-from gestor_cliente import GestorCliente
+import cliente
+from turno import Turno
 import datetime
 import csv
 import os
 
-class   GestorTurno:
-    global agenda_turnos
+class GestorTurno:
     agenda_turnos = {}
 
     def __init__(self):
-        self.gestor_cliente = GestorCliente()
+        pass
 
     def nombre_archivo(self, fecha=None):
         fecha = datetime.datetime.now()
         return f"turnos_{fecha.strftime('%Y%m%d')}.csv"
 
-    def crear_csv_turnos(self):
+    def crear_csv_turnos(self, fecha=None):
         if fecha is None:
             fecha = datetime.datetime.now()
 
@@ -110,50 +109,48 @@ class   GestorTurno:
                         fecha_hora=datetime.datetime.strptime(fila['fecha_hora'], '%Y-%m-%d %H:%M'),
                         estado=fila['estado']
                     )
-                    agenda_turnos[id_turno] = turno
+                    GestorTurno.agenda_turnos[id_turno] = turno
             
-            print(f"Se cargaron {len(agenda_turnos)} turnos desde {nombre_file}.")
+            print(f"Se cargaron {len(GestorTurno.agenda_turnos)} turnos desde {nombre_file}.")
 
         except Exception as e:
             print(f"Error al cargar turnos: {e}")
 
     def listar_turnos_disponibles(self):
-        if not agenda_turnos:
+        if not GestorTurno.agenda_turnos:
             print("No hay turnos cargados. Cargue los turnos primero.")
             return
 
         print(f"{'ID TURNO':<12} {'FECHA Y HORA':<20} {'ESTADO':<15}")
 
-        for id_turno in sorted(agenda_turnos.keys(), key=lambda x: int(x)):
-            turno = agenda_turnos[id_turno]
+        for id_turno in sorted(GestorTurno.agenda_turnos.keys(), key=lambda x: int(x)):
+            turno = GestorTurno.agenda_turnos[id_turno]
             fecha_hora_str = turno.fecha_hora.strftime('%Y-%m-%d %H:%M')
             print(f"{turno.id_turno:<12} {fecha_hora_str:<20} {turno.estado:<15}")
 
         respuesta = input("\n¿Desea asignar un turno? (s/n): ").strip().lower()
         if respuesta == "s":
             dni_cliente = input("Ingrese el DNI del cliente: ").strip()
-            cliente = self.gestor_cliente.buscar_cliente(dni_cliente,"1")
+            from gestor_cliente import GestorCliente
+            gestor_cliente = GestorCliente()
+            cliente = gestor_cliente.buscar_cliente(dni_cliente, "1")
             
             if cliente:
                 id_turno = input("Ingrese el ID del turno a asignar: ").strip()
-                if id_turno in agenda_turnos:
-                    turno = agenda_turnos[id_turno]
-                    turno.cliente = cliente
-                    print(f"Turno {id_turno} asignado a {cliente}")
-                else:
-                    print(f"El turno {id_turno} no existe.")
+                self.asignar_turno(id_turno, cliente)
 
+    def asignar_turno(self, id_turno, cliente):
+        if id_turno in GestorTurno.agenda_turnos:
+            turno = GestorTurno.agenda_turnos[id_turno]
+            turno.cliente = cliente
+            turno.estado = "Asignado"
+            turno.servicio = "Peluqueria"
+            GestorTurno.agenda_turnos[id_turno] = turno
 
-    def buscar_turnos_x_cliente(dni_cliente):
-        """
-        Busca y muestra todos los turnos asociados a un cliente por su DNI.
-
-        Args:
-            dni_cliente (str): El DNI del cliente a buscar
-        """
+    def buscar_turnos_x_cliente(self, dni_cliente):
         turnos_encontrados = []
-        for id_turno, turno in agenda_turnos.items():
-            if turno.cliente.id_cliente == dni_cliente:
+        for id_turno, turno in GestorTurno.agenda_turnos.items():
+            if turno.cliente and turno.cliente.id_cliente == dni_cliente:
                 turnos_encontrados.append(turno)
 
         if not turnos_encontrados:
@@ -174,5 +171,35 @@ class   GestorTurno:
             
             print(f"{turno.id_turno:<12} {id_cliente:<15} {nombre:<15} {apellido:<15} {telefono:<15} {email:<20} {servicio:<15} {fecha_hora_str:<20} {turno.estado:<15}")
         
+    def guardar_agenda(self):
+        # Obtener el nombre del archivo
+        nombre_file = self.nombre_archivo()
+        ruta_archivo = os.path.join(os.path.dirname(__file__), "Agendas", "Turnos", nombre_file)
 
+        try:
+            with open(ruta_archivo, 'w', encoding='utf-8', newline='') as archivo:
+                fieldnames = ['id_turno', 'id_cliente', 'nombre', 'apellido', 'telefono', 'email', 'servicio', 'fecha_hora', 'estado']
+                escritor = csv.DictWriter(archivo, fieldnames=fieldnames)
+                escritor.writeheader()
+
+                for id_turno in sorted(GestorTurno.agenda_turnos.keys(), key=lambda x: int(x)):
+                    turno = GestorTurno.agenda_turnos[id_turno]
+                    fila = {
+                        'id_turno': turno.id_turno,
+                        'id_cliente': turno.cliente.id_cliente if turno.cliente else '',
+                        'nombre': turno.cliente.nombre if turno.cliente else '',
+                        'apellido': turno.cliente.apellido if turno.cliente else '',
+                        'telefono': turno.cliente.telefono if turno.cliente else '',
+                        'email': turno.cliente.email if turno.cliente else '',
+                        'servicio': turno.servicio if turno.servicio else '',
+                        'fecha_hora': turno.fecha_hora.strftime('%Y-%m-%d %H:%M'),
+                        'estado': turno.estado
+                    }
+                    escritor.writerow(fila)
+            
+            print(f"Agenda de turnos guardada en {nombre_file}.")
+
+        except Exception as e:
+            print(f"Error al guardar agenda de turnos: {e}")
+        
 

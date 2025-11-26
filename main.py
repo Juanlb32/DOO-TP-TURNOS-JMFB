@@ -8,7 +8,7 @@ gestor_cliente = GestorCliente()
 gestor_turno = GestorTurno()
 
 def main():
-    gestor_cliente.agenda_clientes()
+    gestor_cliente.cargar_agenda_clientes()
     gestor_turno.cargar_turnos()
     mostar_menu()
 
@@ -19,7 +19,7 @@ def mostar_menu():
         print("1. Registrar nuevo cliente")
         print("2. Solicitar turno")
         print("3. Listar turnos Disponibles")
-        print("4. Cargar Turnos")
+        print("4. guardar Agenda de turnos")
         print("5. Buscar turnos por cliente")
         print("6. Salir")
         
@@ -33,14 +33,20 @@ def mostar_menu():
         elif opcion == '3':
             gestor_turno.listar_turnos_disponibles()
         elif opcion == '4':
+            print("Guardando agenda de turnos...")
+            gestor_turno.guardar_agenda()
+            print("Cargando turnos desde archivo...")
             gestor_turno.cargar_turnos()
         elif opcion == '5':
             dni_cliente = input("Ingrese el DNI del cliente: ") 
             gestor_turno.buscar_turnos_x_cliente(dni_cliente)
         elif opcion == '6':
+            print("Guardando agenda de turnos...")
+            gestor_turno.guardar_agenda()
             print("Saliendo del sistema.")
             break
         else:
             print("Opción inválida. Intente nuevamente.")
 
 
+main()
