@@ -84,6 +84,7 @@ class GestorTurno:
             if not os.path.exists(ruta_archivo):
                 print(f"El archivo {nombre_file} no existe. Creando...")
                 self.crear_csv_turnos()
+        
             
             with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
                 lector = csv.DictReader(archivo)
@@ -130,6 +131,11 @@ class GestorTurno:
                 print(f"{turno.id_turno:<12} {fecha_hora_str:<20} {turno.estado:<15}")
 
         respuesta = input("\n¿Desea asignar un turno? (s/n): ").strip().lower()
+
+        respuestas = ["s", "n"]
+        while respuesta not in respuestas:
+            respuesta = input("Respuesta inválida. Por favor ingrese 's' o 'n': ").strip().lower()
+
         if respuesta == "s":
             if cliente is None:
                 dni_cliente = input("Ingrese el DNI del cliente: ").strip()
@@ -148,13 +154,17 @@ class GestorTurno:
             turno.estado = "Asignado"
             turno.servicio = "Peluqueria"
             GestorTurno.agenda_turnos[id_turno] = turno
-            
+
+
             fecha_hora_str = turno.fecha_hora.strftime('%Y-%m-%d %H:%M')
             print(f"\n--- Turno Asignado ---")
             print(f"Nombre: {cliente.nombre}")
             print(f"Apellido: {cliente.apellido}")
             print(f"DNI Cliente: {cliente.id_cliente}")
             print(f"Fecha y Hora: {fecha_hora_str}\n")
+
+            input("Presione Enter para continuar...")
+
 
     def buscar_turnos_x_cliente(self, dni_cliente):
         turnos_encontrados = []
@@ -210,5 +220,3 @@ class GestorTurno:
 
         except Exception as e:
             print(f"Error al guardar agenda de turnos: {e}")
-        
-

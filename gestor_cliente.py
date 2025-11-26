@@ -54,7 +54,7 @@ class GestorCliente:
                     print("3. Eliminar cliente")
                     print("4. Volver")
                     
-                    opcion = input("Seleccione una opción (1-4): ").strip()
+                    opcion = input("Seleccione una opción: ").strip()
                     
                     if opcion == "1":
                         print("Asignando turno...")

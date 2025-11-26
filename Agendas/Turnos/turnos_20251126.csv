@@ -1,5 +1,5 @@
 id_turno,id_cliente,nombre,apellido,telefono,email,servicio,fecha_hora,estado
-1,31507037,Juan Manuel,Martinez,112233445566,juanlb32@gmail.com,Peluqueria,2025-11-26 10:00,Asignado
+1,,,,,,,2025-11-26 10:00,Disponible
 2,,,,,,,2025-11-26 10:30,Disponible
 3,,,,,,,2025-11-26 11:00,Disponible
 4,,,,,,,2025-11-26 11:30,Disponible
@@ -17,5 +17,5 @@ id_turno,id_cliente,nombre,apellido,telefono,email,servicio,fecha_hora,estado
 16,,,,,,,2025-11-26 17:30,Disponible
 17,,,,,,,2025-11-26 18:00,Disponible
 18,,,,,,,2025-11-26 18:30,Disponible
-19,31507037,Juan Manuel,Martinez,112233445566,juanlb32@gmail.com,,2025-11-26 19:00,Asignado
-20,3150737,sss,ssss,231313213,saassd,,2025-11-26 19:30,Asignado
+19,,,,,,,2025-11-26 19:00,Disponible
+20,,,,,,,2025-11-26 19:30,Disponible
