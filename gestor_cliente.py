@@ -60,7 +60,7 @@ class GestorCliente:
                         print("Asignando turno...")
                         from gestor_turnos import GestorTurno
                         gestor_turno = GestorTurno()
-                        gestor_turno.listar_turnos_disponibles()
+                        gestor_turno.listar_turnos_disponibles(cliente)
                         return cliente
                     elif opcion == "2":
                         cliente = self.modificar_cliente(dni_cliente)

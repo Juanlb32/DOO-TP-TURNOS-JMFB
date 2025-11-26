@@ -26,8 +26,8 @@ def mostar_menu():
         opcion = input("Seleccione una opción: ")
         
         if opcion == '1':
-            dni =   input("Ingrese el DNI del cliente a cargar: ")
-            gestor_cliente.buscar_cliente(dni)
+            dni_cliente =   input("Ingrese el DNI del cliente a cargar: ")
+            gestor_cliente.buscar_cliente(dni_cliente)
         elif opcion == '2':
             gestor_turno.listar_turnos_disponibles()
         elif opcion == '3':

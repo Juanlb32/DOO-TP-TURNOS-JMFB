@@ -116,7 +116,7 @@ class GestorTurno:
         except Exception as e:
             print(f"Error al cargar turnos: {e}")
 
-    def listar_turnos_disponibles(self):
+    def listar_turnos_disponibles(self, cliente=None):
         if not GestorTurno.agenda_turnos:
             print("No hay turnos cargados. Cargue los turnos primero.")
             return
@@ -125,15 +125,17 @@ class GestorTurno:
 
         for id_turno in sorted(GestorTurno.agenda_turnos.keys(), key=lambda x: int(x)):
             turno = GestorTurno.agenda_turnos[id_turno]
-            fecha_hora_str = turno.fecha_hora.strftime('%Y-%m-%d %H:%M')
-            print(f"{turno.id_turno:<12} {fecha_hora_str:<20} {turno.estado:<15}")
+            if turno.estado == "Disponible":
+                fecha_hora_str = turno.fecha_hora.strftime('%Y-%m-%d %H:%M')
+                print(f"{turno.id_turno:<12} {fecha_hora_str:<20} {turno.estado:<15}")
 
         respuesta = input("\n¿Desea asignar un turno? (s/n): ").strip().lower()
         if respuesta == "s":
-            dni_cliente = input("Ingrese el DNI del cliente: ").strip()
-            from gestor_cliente import GestorCliente
-            gestor_cliente = GestorCliente()
-            cliente = gestor_cliente.buscar_cliente(dni_cliente, "1")
+            if cliente is None:
+                dni_cliente = input("Ingrese el DNI del cliente: ").strip()
+                from gestor_cliente import GestorCliente
+                gestor_cliente = GestorCliente()
+                cliente = gestor_cliente.buscar_cliente(dni_cliente, "1")
             
             if cliente:
                 id_turno = input("Ingrese el ID del turno a asignar: ").strip()
@@ -146,6 +148,13 @@ class GestorTurno:
             turno.estado = "Asignado"
             turno.servicio = "Peluqueria"
             GestorTurno.agenda_turnos[id_turno] = turno
+            
+            fecha_hora_str = turno.fecha_hora.strftime('%Y-%m-%d %H:%M')
+            print(f"\n--- Turno Asignado ---")
+            print(f"Nombre: {cliente.nombre}")
+            print(f"Apellido: {cliente.apellido}")
+            print(f"DNI Cliente: {cliente.id_cliente}")
+            print(f"Fecha y Hora: {fecha_hora_str}\n")
 
     def buscar_turnos_x_cliente(self, dni_cliente):
         turnos_encontrados = []
