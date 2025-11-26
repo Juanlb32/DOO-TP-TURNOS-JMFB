@@ -1,0 +1,21 @@
+id_turno,id_cliente,nombre,apellido,telefono,email,servicio,fecha_hora,estado
+1,,,,,,,2025-11-26 10:00,Disponible
+2,,,,,,,2025-11-26 10:30,Disponible
+3,,,,,,,2025-11-26 11:00,Disponible
+4,,,,,,,2025-11-26 11:30,Disponible
+5,,,,,,,2025-11-26 12:00,Disponible
+6,,,,,,,2025-11-26 12:30,Disponible
+7,,,,,,,2025-11-26 13:00,Disponible
+8,,,,,,,2025-11-26 13:30,Disponible
+9,,,,,,,2025-11-26 14:00,Disponible
+10,,,,,,,2025-11-26 14:30,Disponible
+11,,,,,,,2025-11-26 15:00,Disponible
+12,,,,,,,2025-11-26 15:30,Disponible
+13,,,,,,,2025-11-26 16:00,Disponible
+14,,,,,,,2025-11-26 16:30,Disponible
+15,,,,,,,2025-11-26 17:00,Disponible
+16,,,,,,,2025-11-26 17:30,Disponible
+17,,,,,,,2025-11-26 18:00,Disponible
+18,,,,,,,2025-11-26 18:30,Disponible
+19,,,,,,,2025-11-26 19:00,Disponible
+20,,,,,,,2025-11-26 19:30,Disponible
